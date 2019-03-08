@@ -51,6 +51,41 @@ include::jqassistant/ood-metrics.adoc[]
 
 include::jqassistant/visibility-metrics.adoc[]
 
+include::jqassistant/lcom4-metrics.adoc[]
+
+== Further Metrics
+
+=== Relational Cohesion
+
+Relational Cohesion = (Number of relationships between subcomponents + 1) / (Number of all subcomponents)
+
+=== Relative Cyclicity
+
+////
+Der Anteil an Bausteinen, welche durch ihre Abhängigkeiten Teil von Strukturzyklen sind.
+So gibt ein Wert von 25% an, dass ein Viertel aller Bausteine zyklisch von anderen Bausteinen abhängig ist.
+Der Anteil sollte möglichst gering gehalten werden.
+////
+
+=== Relative Average Component Dependency (RACD)
+
+////
+Diese Kennzahl von John Lakos gibt den Prozentsatz an Bausteinen an, von dem jeder einzelne Baustein im Durchschnitt abhängig ist.
+Dabei werden auch transitive Abhängigkeiten berücksichtigt.
+Ein Wert von beispielsweise 50% besagt, dass man zum Kompilieren, Verstehen und Testen eines einzelnen Bausteins im Schnitt die Hälfte aller Bausteine des Systems benötigt.
+Hier ist natürlich ein möglichst niedriger Wert wünschenswert.
+////
+
+=== Weighted Methods for Class (WMC)
+
+=== Response for a Class (RFC)
+
+=== Coupling Between Objects (CBO)
+
+=== Depth of Inheritance Tree (DIT)
+
+=== Number of Children (NOC)
+
 == Implementation
 
 This metrics are implemented in the https://github.com/jqassistant-contrib/jqassistant-java-metrics-plugin[jQAssistant Java Metrics plugin].

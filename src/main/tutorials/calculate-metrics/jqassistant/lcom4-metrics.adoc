@@ -1,0 +1,109 @@
+== LCOM4
+
+Lack of Cohesion in Methods
+
+=== LCOM
+
+////
+Hohe LCOM-Werte indizieren Substrukturen, welche nicht in Verbindung zueinander stehen, und somit eher getrennt werden sollten.
+Während diese Metrik hauptsächlich auf Klassenebene berechnet wird, ist derselbe Mechanismus auch auf höheren Abstraktionsebenen wie Packages, Modulen oder Microservices anwendbar.
+////
+
+LCOM4 measures the number of "connected components" in a class.
+A connected component is a set of related methods (and class-level variables).
+There should be only one such a component in each class.
+If there are 2 or more components, the class should be split into so many smaller classes.
+
+* LCOM4 = 1: The class is a solid component with all methods and fields related
+* LCOM4 > 1: The class can be split to different classes
+* LCOM4 = 0: The class has no methods
+
+According to the single responsibility principle, a class should provide a single component with all methods and fields related.
+This is the case when LCOM4 = 1.
+Otherwise, the class lacks of cohesion.
+
+[[lcom4-metrics:createGroups]]
+.Computes LCOM4
+[source,cypher,role=concept]
+----
+MATCH (c:Java:Class)-[:DECLARES]->(f:Field) WHERE f.static IS NULL
+WITH c, collect(f) AS fields
+OPTIONAL MATCH (c)-[:DECLARES]->(m:Method) WHERE m.static IS NULL
+WITH c, fields, collect(m) AS methods
+UNWIND fields AS field
+MERGE (c)-[:HAS_GROUP]->(g:Group {name:field.name, group:true})-[:BELONGS_TO]->(field)
+WITH c, methods, field, g
+UNWIND methods AS method
+MATCH (method)-[:READS|WRITES*1..]->(field)
+MERGE (g)-[:BELONGS_TO]->(method)
+WITH c, methods, field, g
+MATCH (method)-[:INVOKES*1..]->(:Method)-[:READS|WRITES*1..]->(field)
+MERGE (g)-[:BELONGS_TO]->(method)
+RETURN g
+----
+
+[[lcom4-metrics:mergeGroups]]
+.Computes LCOM4
+[source,cypher,role=concept,requiresConcepts="lcom4-metrics:createGroups"]
+----
+MATCH (c:Java:Class)-[:DECLARES]->(m:Method) WHERE m.static IS NULL
+WITH c, collect(m) AS methods
+UNWIND methods AS method
+MATCH p=(g1:Group)-[:BELONGS_TO]->(method)<-[:BELONGS_TO]-(g2:Group) WHERE g1<>g2
+WITH c, methods, filter(oneNode IN nodes(p) WHERE oneNode.group = true) AS groups
+CALL apoc.refactor.mergeNodes(groups, {properties:"combine", mergeRels:true}) YIELD node
+RETURN c
+----
+
+[[lcom4-metrics:Lcom4]]
+.Computes LCOM4
+[source,cypher,role=concept,requiresConcepts="lcom4-metrics:mergeGroups"]
+----
+MATCH (c:Java:Class)-[:HAS_GROUP]->(g:Group)
+WITH c, count(distinct g) AS lcom4
+SET c.lcom4 = lcom4
+RETURN c
+----
+
+==== Example
+
+==== Test
+
+[[lcom4-metrics:Lcom4Clazz1]]
+.Computes LCOM4 of Clazz1
+[source,cypher,role=concept,requiresConcepts="lcom4-metrics:Lcom4",severity=major]
+----
+MATCH (c:Java:Class {fqn:"your.project.lcom.a.Clazz1", lcom4:2})
+RETURN c
+----
+
+[[lcom4-metrics:Lcom4Clazz2]]
+.Computes LCOM4 of Clazz2
+[source,cypher,role=concept,requiresConcepts="lcom4-metrics:Lcom4",severity=major]
+----
+MATCH (c:Java:Class {fqn:"your.project.lcom.a.Clazz2", lcom4:1})
+RETURN c
+----
+
+=== LCOM on package level
+
+[[lcom4-metric:LcomPackage]]
+.Computes LCOM per package
+[source,cypher,role=concept]
+----
+MATCH (p:Java:Package)-[:CONTAINS]->(t:Java:Type)
+RETURN p
+----
+
+==== Example
+
+==== Test
+
+[[lcom4-metrics:LcomTests]]
+[role=group,includesConcepts="lcom4-metrics:Lcom4Clazz1,lcom4-metrics:Lcom4Clazz2"]
+
+After the last concept, constraint or group has to stand a heading or text.
+
+=== Resources
+
+1. abc
