@@ -73,7 +73,7 @@ RETURN c
 .Computes LCOM4 of Clazz1
 [source,cypher,role=concept,requiresConcepts="lcom4-metrics:Lcom4",severity=major]
 ----
-MATCH (c:Java:Class {fqn:"your.project.lcom.a.Clazz1", lcom4:2})
+MATCH (c:Java:Class {fqn:"your.project.lcom.a.Clazz1", lcom4:1})
 RETURN c
 ----
 
@@ -82,6 +82,14 @@ RETURN c
 [source,cypher,role=concept,requiresConcepts="lcom4-metrics:Lcom4",severity=major]
 ----
 MATCH (c:Java:Class {fqn:"your.project.lcom.a.Clazz2", lcom4:1})
+RETURN c
+----
+
+[[lcom4-metrics:Lcom4Clazz3]]
+.Computes LCOM4 of Clazz3
+[source,cypher,role=concept,requiresConcepts="lcom4-metrics:Lcom4",severity=major]
+----
+MATCH (c:Java:Class {fqn:"your.project.lcom.a.Clazz3", lcom4:2})
 RETURN c
 ----
 
@@ -100,7 +108,7 @@ RETURN p
 ==== Test
 
 [[lcom4-metrics:LcomTests]]
-[role=group,includesConcepts="lcom4-metrics:Lcom4Clazz1,lcom4-metrics:Lcom4Clazz2"]
+[role=group,includesConcepts="lcom4-metrics:Lcom4Clazz1,lcom4-metrics:Lcom4Clazz2,lcom4-metrics:Lcom4Clazz3"]
 
 After the last concept, constraint or group has to stand a heading or text.
 
