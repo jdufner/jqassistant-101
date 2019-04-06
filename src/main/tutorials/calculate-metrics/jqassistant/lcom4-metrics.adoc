@@ -1,8 +1,6 @@
-== LCOM4
+== Cohesion metrics
 
-Lack of Cohesion in Methods
-
-=== LCOM
+=== LCOM - Lack of Cohesion in Methods
 
 ////
 Hohe LCOM-Werte indizieren Substrukturen, welche nicht in Verbindung zueinander stehen, und somit eher getrennt werden sollten.
@@ -93,22 +91,40 @@ MATCH (c:Java:Class {fqn:"your.project.lcom.a.Clazz3", lcom4:2})
 RETURN c
 ----
 
-=== LCOM on package level
+[[lcom4-metrics:LcomTests]]
+[role=group,includesConcepts="lcom4-metrics:Lcom4Clazz1,lcom4-metrics:Lcom4Clazz2,lcom4-metrics:Lcom4Clazz3"]
 
-[[lcom4-metric:LcomPackage]]
-.Computes LCOM per package
+=== CohP - package level cohesion metric
+
+[[lcom4-metrics:Cohp]]
+.Computes a package level cohesion metric
 [source,cypher,role=concept]
 ----
 MATCH (p:Java:Package)-[:CONTAINS]->(t:Java:Type)
 RETURN p
 ----
 
+Erzeuge für jeden Typ eine Gruppe und ordne jedem Typ und deren abhängigen Typen eine Gruppe zu
+
+````
+MATCH (p:Java:Package {fqn:"your.project.lcom.b"})-[:CONTAINS]->(t:Java:Type)
+WITH p, collect(t) AS types
+UNWIND types AS type MERGE (p)-[:HAS_GROUP]->(g:Group {name:type.name, group:true})-[:BELONGS_TO]->(type)
+WITH p, g, type
+MATCH (t:Type)-[:DEPENDS_ON*1..]->(type) MERGE (g)-[:BELONGS_TO]->(t)
+RETURN g
+````
+
+Führe Gruppen zusammen, die mindestens einen gemeinsamen Typen haben.
+
+`MATCH (p:Java:Package {fqn:"your.project.lcom.b"})-[:CONTAINS]->(t:Java:Type) WITH p, collect(t) AS types UNWIND types AS type MATCH path=(g1:Group)-[:BELONGS_TO]->(type)<-[:BELONGS_TO]-(g2:Group) WHERE g1<>g2 AND id(g1)<id(g2) WITH p, types, filter(aNode in nodes(path) WHERE aNode.group = true) AS groups CALL apoc.refactor.mergeNodes(groups, {properties:"combine", mergeRels:true}) YIELD node RETURN p`
+
 ==== Example
 
 ==== Test
 
-[[lcom4-metrics:LcomTests]]
-[role=group,includesConcepts="lcom4-metrics:Lcom4Clazz1,lcom4-metrics:Lcom4Clazz2,lcom4-metrics:Lcom4Clazz3"]
+[[lcom4-metrics:CohpTests]]
+[role=group,includesConcepts="lcom4-metrics:Cohp"]
 
 After the last concept, constraint or group has to stand a heading or text.
 
