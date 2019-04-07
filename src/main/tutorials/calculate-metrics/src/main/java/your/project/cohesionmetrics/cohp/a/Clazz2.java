@@ -1,4 +1,4 @@
-package your.project.lcom.b;
+package your.project.cohesionmetrics.cohp.a;
 
 final class Clazz2 {
 

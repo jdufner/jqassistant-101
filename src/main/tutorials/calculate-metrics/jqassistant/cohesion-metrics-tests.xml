@@ -1,0 +1,61 @@
+<jqa:jqassistant-rules xmlns:jqa="http://www.buschmais.com/jqassistant/core/rule/schema/v1.3">
+
+  <!-- https://github.com/buschmais/jqa-core-framework/blob/master/rule/src/main/resources/META-INF/xsd/jqassistant-rules-1.4.xsd -->
+
+  <group id="cohesion-metrics:LcomTests">
+    <includeConcept refId="cohesion-metrics:LcomClazz1"/>
+    <includeConcept refId="cohesion-metrics:LcomClazz2"/>
+    <includeConcept refId="cohesion-metrics:LcomClazz3"/>
+    <includeConcept refId="cohesion-metrics:LcomClazz4"/>
+  </group>
+
+  <concept id="cohesion-metrics:LcomClazz1" severity="major">
+    <requiresConcept refId="cohesion-metrics:Lcom4"/>
+    <description>The LCOM of class your.project.cohesionmetrics.lcom.Clazz1 must fulfill the expected values.</description>
+    <cypher><![CDATA[
+      MATCH (c:Java:Class {fqn:"your.project.cohesionmetrics.lcom.Clazz1", lcom4:2})
+      RETURN c
+     ]]></cypher>
+  </concept>
+
+  <concept id="cohesion-metrics:LcomClazz2" severity="major">
+    <requiresConcept refId="cohesion-metrics:Lcom4"/>
+    <description>The LCOM of class your.project.cohesionmetrics.lcom.Clazz2 must fulfill the expected values.</description>
+    <cypher><![CDATA[
+      MATCH (c:Java:Class {fqn:"your.project.cohesionmetrics.lcom.Clazz2", lcom4:1})
+      RETURN c
+    ]]></cypher>
+  </concept>
+
+  <concept id="cohesion-metrics:LcomClazz3" severity="major">
+    <requiresConcept refId="cohesion-metrics:Lcom4"/>
+    <description>The LCOM of class your.project.cohesionmetrics.lcom.Clazz3 must fulfill the expected values.</description>
+    <cypher><![CDATA[
+      MATCH (c:Java:Class {fqn:"your.project.cohesionmetrics.lcom.Clazz3", lcom4:2})
+      RETURN c
+    ]]></cypher>
+  </concept>
+
+  <concept id="cohesion-metrics:LcomClazz4" severity="major">
+    <requiresConcept refId="cohesion-metrics:Lcom4"/>
+    <description>The LCOM of class your.project.cohesionmetrics.lcom.Clazz4 must fulfill the expected values.</description>
+    <cypher><![CDATA[
+      MATCH (c:Java:Class {fqn:"your.project.cohesionmetrics.lcom.Clazz4", lcom4:1})
+      RETURN c
+    ]]></cypher>
+  </concept>
+
+  <group id="cohesion-metrics:CohpTests">
+    <includeConcept refId="cohesion-metrics:cophPackageA"/>
+  </group>
+
+  <concept id="cohesion-metrics:cophPackageA" severity="major">
+    <requiresConcept refId="cohesion-metrics:Cohp"/>
+    <description>The cohesion metric of package your.project.coph.a must fulfill the expected values.</description>
+    <cypher><![CDATA[
+      MATCH (p:Java:Package {fqn:"your.project.cohesionmetrics.cohp.a"})
+      RETURN p
+     ]]></cypher>
+  </concept>
+
+</jqa:jqassistant-rules>

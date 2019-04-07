@@ -42,8 +42,8 @@
                 <group>ood-metrics:AbstractnessTests</group>
                 <group>ood-metrics:DistanceTests</group>
                 <group>visibility-metrics:RelativeVisibilityTests</group>
-<!--                <group>lcom4-metrics:LcomTests</group>-->
-                <group>lcom4-metrics:CohpTests</group>
+                <group>cohesion-metrics:LcomTests</group>
+                <group>cohesion-metrics:CohpTests</group>
               </groups>
             </configuration>
           </execution>

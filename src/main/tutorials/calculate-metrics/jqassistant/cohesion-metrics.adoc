@@ -20,8 +20,8 @@ According to the single responsibility principle, a class should provide a singl
 This is the case when LCOM4 = 1.
 Otherwise, the class lacks of cohesion.
 
-[[lcom4-metrics:createGroups]]
-.Computes LCOM4
+[[cohesion-metrics:LcomCreateGroups]]
+.Creates a group for each field and assigns the field to the group and the group to the class.
 [source,cypher,role=concept]
 ----
 MATCH (c:Java:Class)-[:DECLARES]->(f:Field) WHERE f.static IS NULL
@@ -40,93 +40,73 @@ MERGE (g)-[:BELONGS_TO]->(method)
 RETURN g
 ----
 
-[[lcom4-metrics:mergeGroups]]
-.Computes LCOM4
-[source,cypher,role=concept,requiresConcepts="lcom4-metrics:createGroups"]
+[[cohesion-metrics:LcomMergeGroups]]
+.Merges all groups that belong to one shared field or method.
+[source,cypher,role=concept,requiresConcepts="cohesion-metrics:LcomCreateGroups"]
 ----
 MATCH (c:Java:Class)-[:DECLARES]->(m:Method) WHERE m.static IS NULL
 WITH c, collect(m) AS methods
 UNWIND methods AS method
-MATCH p=(g1:Group)-[:BELONGS_TO]->(method)<-[:BELONGS_TO]-(g2:Group) WHERE g1<>g2
-WITH c, methods, filter(oneNode IN nodes(p) WHERE oneNode.group = true) AS groups
+MATCH path=(g1:Group)-[:BELONGS_TO]->(method)<-[:BELONGS_TO]-(g2:Group) WHERE g1<>g2
+WITH c, methods, filter(aNode IN nodes(path) WHERE aNode.group = true) AS groups
 CALL apoc.refactor.mergeNodes(groups, {properties:"combine", mergeRels:true}) YIELD node
 RETURN c
 ----
 
-[[lcom4-metrics:Lcom4]]
-.Computes LCOM4
-[source,cypher,role=concept,requiresConcepts="lcom4-metrics:mergeGroups"]
+[[cohesion-metrics:Lcom4]]
+.Counts the groups per class and sets the attribute lcom4.
+[source,cypher,role=concept,requiresConcepts="cohesion-metrics:LcomMergeGroups"]
 ----
 MATCH (c:Java:Class)-[:HAS_GROUP]->(g:Group)
-WITH c, count(distinct g) AS lcom4
+WITH c, count(DISTINCT g) AS lcom4
 SET c.lcom4 = lcom4
 RETURN c
 ----
 
 ==== Example
 
-==== Test
-
-[[lcom4-metrics:Lcom4Clazz1]]
-.Computes LCOM4 of Clazz1
-[source,cypher,role=concept,requiresConcepts="lcom4-metrics:Lcom4",severity=major]
-----
-MATCH (c:Java:Class {fqn:"your.project.lcom.a.Clazz1", lcom4:1})
-RETURN c
-----
-
-[[lcom4-metrics:Lcom4Clazz2]]
-.Computes LCOM4 of Clazz2
-[source,cypher,role=concept,requiresConcepts="lcom4-metrics:Lcom4",severity=major]
-----
-MATCH (c:Java:Class {fqn:"your.project.lcom.a.Clazz2", lcom4:1})
-RETURN c
-----
-
-[[lcom4-metrics:Lcom4Clazz3]]
-.Computes LCOM4 of Clazz3
-[source,cypher,role=concept,requiresConcepts="lcom4-metrics:Lcom4",severity=major]
-----
-MATCH (c:Java:Class {fqn:"your.project.lcom.a.Clazz3", lcom4:2})
-RETURN c
-----
-
-[[lcom4-metrics:LcomTests]]
-[role=group,includesConcepts="lcom4-metrics:Lcom4Clazz1,lcom4-metrics:Lcom4Clazz2,lcom4-metrics:Lcom4Clazz3"]
 
 === CohP - package level cohesion metric
 
-[[lcom4-metrics:Cohp]]
-.Computes a package level cohesion metric
+Computes a package level cohesion metric
+
+[[cohesion-metrics:CohpCreateGroups]]
+.Creates a group for each type and assigns the type to the group and the group to the package.
 [source,cypher,role=concept]
 ----
 MATCH (p:Java:Package)-[:CONTAINS]->(t:Java:Type)
-RETURN p
-----
-
-Erzeuge für jeden Typ eine Gruppe und ordne jedem Typ und deren abhängigen Typen eine Gruppe zu
-
-````
-MATCH (p:Java:Package {fqn:"your.project.lcom.b"})-[:CONTAINS]->(t:Java:Type)
 WITH p, collect(t) AS types
 UNWIND types AS type MERGE (p)-[:HAS_GROUP]->(g:Group {name:type.name, group:true})-[:BELONGS_TO]->(type)
 WITH p, g, type
 MATCH (t:Type)-[:DEPENDS_ON*1..]->(type) MERGE (g)-[:BELONGS_TO]->(t)
 RETURN g
-````
+----
 
-Führe Gruppen zusammen, die mindestens einen gemeinsamen Typen haben.
+[[cohesion-metrics:CohpMergeGroups]]
+.Merges groups with at least one shared type.
+[source,cypher,role=concept,requiresConcepts="cohesion-metrics:CohpCreateGroups"]
+----
+MATCH (p:Java:Package)-[:CONTAINS]->(t:Java:Type)
+WITH p, collect(t) AS types
+UNWIND types AS type
+MATCH path=(g1:Group)-[:BELONGS_TO]->(type)<-[:BELONGS_TO]-(g2:Group) WHERE g1<>g2
+WITH p, types, filter(aNode in nodes(path) WHERE aNode.group = true) AS groups
+CALL apoc.refactor.mergeNodes(groups, {properties:"combine", mergeRels:true}) YIELD node
+RETURN p
+----
 
-`MATCH (p:Java:Package {fqn:"your.project.lcom.b"})-[:CONTAINS]->(t:Java:Type) WITH p, collect(t) AS types UNWIND types AS type MATCH path=(g1:Group)-[:BELONGS_TO]->(type)<-[:BELONGS_TO]-(g2:Group) WHERE g1<>g2 AND id(g1)<id(g2) WITH p, types, filter(aNode in nodes(path) WHERE aNode.group = true) AS groups CALL apoc.refactor.mergeNodes(groups, {properties:"combine", mergeRels:true}) YIELD node RETURN p`
+[[cohesion-metrics:Cohp]]
+.Counts groups per package and sets the attribute cohp.
+[source,cypher,role=concept,requiresConcepts="cohesion-metrics:CohpMergeGroups"]
+----
+MATCH (p:Java:Package)-[:HAS_GROUP]->(g:Group)
+WITH p, count(DISTINCT g) AS cohp
+SET p.cohp = cohp
+RETURN p
+----
 
 ==== Example
 
-==== Test
-
-[[lcom4-metrics:CohpTests]]
-[role=group,includesConcepts="lcom4-metrics:Cohp"]
-
-After the last concept, constraint or group has to stand a heading or text.
 
 === Resources
 
