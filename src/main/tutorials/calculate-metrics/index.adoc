@@ -51,7 +51,7 @@ include::jqassistant/ood-metrics.adoc[]
 
 include::jqassistant/visibility-metrics.adoc[]
 
-include::jqassistant/lcom4-metrics.adoc[]
+include::jqassistant/cohesion-metrics.adoc[]
 
 == Further Metrics
 
