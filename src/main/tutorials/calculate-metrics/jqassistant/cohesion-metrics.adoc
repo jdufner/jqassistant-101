@@ -7,18 +7,34 @@ Hohe LCOM-Werte indizieren Substrukturen, welche nicht in Verbindung zueinander 
 Während diese Metrik hauptsächlich auf Klassenebene berechnet wird, ist derselbe Mechanismus auch auf höheren Abstraktionsebenen wie Packages, Modulen oder Microservices anwendbar.
 ////
 
-LCOM4 measures the number of "connected components" in a class.
+LCOM measures the number of "connected components" in a class.
 A connected component is a set of related methods (and class-level variables).
 There should be only one such a component in each class.
 If there are 2 or more components, the class should be split into so many smaller classes.
 
-* LCOM4 = 1: The class is a solid component with all methods and fields related
-* LCOM4 > 1: The class can be split to different classes
-* LCOM4 = 0: The class has no methods
+* `LCOM = 1`: The class is a solid component with all methods and fields related.
+* `LCOM > 1`: The class can be split to different classes.
+* `LCOM = 0`: The class has no methods.
 
 According to the single responsibility principle, a class should provide a single component with all methods and fields related.
-This is the case when LCOM4 = 1.
+This is the case when LCOM is exactly 1.
 Otherwise, the class lacks of cohesion.
+But pay attention to the purpose of the class.
+Sometimes there are classes, that contain only utility methods, e.g. https://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/util/StringUtils.html[StringUtils].
+This is completely ok, because all methods are static and they don't belong to one or more fields.
+That means they haven't any connected components.
+
+==== Example
+
+.What means LCOM?
+image::Cohesion_what_means_LCOM.png[Class with LCOM=3]
+
+==== How to calculate LCOM?
+
+To create groups of connected components a group for each field has to be to created.
+
+.Create a group for each field
+image::Cohesion_create_groups_LCOM.png[Step 1: Create a group for each field]
 
 [[cohesion-metrics:LcomCreateGroups]]
 .Creates a group for each field and assigns the field to the group and the group to the class.
@@ -58,8 +74,8 @@ RETURN c
 [source,cypher,role=concept,requiresConcepts="cohesion-metrics:LcomMergeGroups"]
 ----
 MATCH (c:Java:Class)-[:HAS_GROUP]->(g:Group)
-WITH c, count(DISTINCT g) AS lcom4
-SET c.lcom4 = lcom4
+WITH c, count(DISTINCT g) AS lcom
+SET c.lcom = lcom
 RETURN c
 ----
 
