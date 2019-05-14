@@ -3,44 +3,217 @@
   <!-- https://github.com/buschmais/jqa-core-framework/blob/master/rule/src/main/resources/META-INF/xsd/jqassistant-rules-1.4.xsd -->
 
   <group id="cohesion-metrics:LcomTests">
-    <includeConcept refId="cohesion-metrics:LcomClazz1"/>
+    <!--<includeConcept refId="cohesion-metrics:LcomOneC1"/>
+    <includeConcept refId="cohesion-metrics:LcomOneC2"/>
+    <includeConcept refId="cohesion-metrics:LcomOneC3"/>
+    <includeConcept refId="cohesion-metrics:LcomOneC4"/>
+    <includeConcept refId="cohesion-metrics:LcomOneC5"/>
+    <includeConcept refId="cohesion-metrics:LcomOneC6"/>
+    <includeConcept refId="cohesion-metrics:LcomOneC7"/>
+    <includeConcept refId="cohesion-metrics:LcomOneC8"/>-->
+    <includeConcept refId="cohesion-metrics:LcomOneAll"/>
+    <!--<includeConcept refId="cohesion-metrics:LcomOneC1"/>
+    <includeConcept refId="cohesion-metrics:LcomOneC1a"/>
+    <includeConcept refId="cohesion-metrics:LcomOneC2"/>
+    <includeConcept refId="cohesion-metrics:LcomOneC3"/>
+    <includeConcept refId="cohesion-metrics:LcomOneC4"/>
+    <includeConcept refId="cohesion-metrics:LcomOneC5"/>
+    <includeConcept refId="cohesion-metrics:LcomOneC6"/>
+    <includeConcept refId="cohesion-metrics:LcomOneC7"/>
+    <includeConcept refId="cohesion-metrics:LcomOneC8"/>-->
+    <includeConcept refId="cohesion-metrics:LcomTwoAll"/>
+    <!--<includeConcept refId="cohesion-metrics:LcomClazz1"/>
     <includeConcept refId="cohesion-metrics:LcomClazz2"/>
     <includeConcept refId="cohesion-metrics:LcomClazz3"/>
-    <includeConcept refId="cohesion-metrics:LcomClazz4"/>
+    <includeConcept refId="cohesion-metrics:LcomClazz4"/>-->
   </group>
 
-  <concept id="cohesion-metrics:LcomClazz1" severity="major">
-    <requiresConcept refId="cohesion-metrics:Lcom4"/>
-    <description>The LCOM of class your.project.cohesionmetrics.lcom.Clazz1 must fulfill the expected values.</description>
+  <concept id="cohesion-metrics:LcomOneC1" severity="major">
+    <requiresConcept refId="cohesion-metrics:Lcom"/>
+    <description>The LCOM of class your.project.cohesionmetrics.lcom.one.C1 must fulfill the expected value: lcom=1.</description>
     <cypher><![CDATA[
-      MATCH (c:Java:Class {fqn:"your.project.cohesionmetrics.lcom.Clazz1", lcom4:2})
+      MATCH (c:Java:Class {fqn:"your.project.cohesionmetrics.lcom.one.C1", lcom:1})
+      RETURN c
+     ]]></cypher>
+  </concept>
+  <concept id="cohesion-metrics:LcomOneC2" severity="major">
+    <requiresConcept refId="cohesion-metrics:Lcom"/>
+    <description>The LCOM of class your.project.cohesionmetrics.lcom.one.C2 must fulfill the expected value: lcom=1.</description>
+    <cypher><![CDATA[
+      MATCH (c:Java:Class {fqn:"your.project.cohesionmetrics.lcom.one.C2", lcom:1})
+      RETURN c
+     ]]></cypher>
+  </concept>
+  <concept id="cohesion-metrics:LcomOneC3" severity="major">
+    <requiresConcept refId="cohesion-metrics:Lcom"/>
+    <description>The LCOM of class your.project.cohesionmetrics.lcom.one.C3 must fulfill the expected value: lcom=1.</description>
+    <cypher><![CDATA[
+      MATCH (c:Java:Class {fqn:"your.project.cohesionmetrics.lcom.one.C3", lcom:1})
+      RETURN c
+     ]]></cypher>
+  </concept>
+  <concept id="cohesion-metrics:LcomOneC4" severity="major">
+    <requiresConcept refId="cohesion-metrics:Lcom"/>
+    <description>The LCOM of class your.project.cohesionmetrics.lcom.one.C4 must fulfill the expected value: lcom=1.</description>
+    <cypher><![CDATA[
+      MATCH (c:Java:Class {fqn:"your.project.cohesionmetrics.lcom.one.C4", lcom:1})
+      RETURN c
+     ]]></cypher>
+  </concept>
+  <concept id="cohesion-metrics:LcomOneC5" severity="major">
+    <requiresConcept refId="cohesion-metrics:Lcom"/>
+    <description>The LCOM of class your.project.cohesionmetrics.lcom.one.C5 must fulfill the expected value: lcom=1.</description>
+    <cypher><![CDATA[
+      MATCH (c:Java:Class {fqn:"your.project.cohesionmetrics.lcom.one.C5", lcom:1})
+      RETURN c
+     ]]></cypher>
+  </concept>
+  <concept id="cohesion-metrics:LcomOneC6" severity="major">
+    <requiresConcept refId="cohesion-metrics:Lcom"/>
+    <description>The LCOM of class your.project.cohesionmetrics.lcom.one.C6 must fulfill the expected value: lcom=1.</description>
+    <cypher><![CDATA[
+      MATCH (c:Java:Class {fqn:"your.project.cohesionmetrics.lcom.one.C6", lcom:1})
+      RETURN c
+     ]]></cypher>
+  </concept>
+  <concept id="cohesion-metrics:LcomOneC7" severity="major">
+    <requiresConcept refId="cohesion-metrics:Lcom"/>
+    <description>The LCOM of class your.project.cohesionmetrics.lcom.one.C7 must fulfill the expected value: lcom=1.</description>
+    <cypher><![CDATA[
+      MATCH (c:Java:Class {fqn:"your.project.cohesionmetrics.lcom.one.C7", lcom:1})
+      RETURN c
+     ]]></cypher>
+  </concept>
+  <concept id="cohesion-metrics:LcomOneC8" severity="major">
+    <requiresConcept refId="cohesion-metrics:Lcom"/>
+    <description>The LCOM of class your.project.cohesionmetrics.lcom.one.C8 must fulfill the expected value: lcom=1.</description>
+    <cypher><![CDATA[
+      MATCH (c:Java:Class {fqn:"your.project.cohesionmetrics.lcom.one.C8", lcom:1})
+      RETURN c
+     ]]></cypher>
+  </concept>
+  <concept id="cohesion-metrics:LcomOneAll" severity="major">
+    <requiresConcept refId="cohesion-metrics:Lcom"/>
+    <description>The LCOM of class your.project.cohesionmetrics.lcom.one.All must fulfill the expected value: lcom=8.</description>
+    <cypher><![CDATA[
+      MATCH (c:Java:Class {fqn:"your.project.cohesionmetrics.lcom.one.All", lcom:8})
+      RETURN c
+     ]]></cypher>
+  </concept>
+
+  <concept id="cohesion-metrics:LcomTwoC1" severity="major">
+    <requiresConcept refId="cohesion-metrics:Lcom"/>
+    <description>The LCOM of class your.project.cohesionmetrics.lcom.two.C1 must fulfill the expected value: lcom=2.</description>
+    <cypher><![CDATA[
+      MATCH (c:Java:Class {fqn:"your.project.cohesionmetrics.lcom.two.C1", lcom:2})
+      RETURN c
+     ]]></cypher>
+  </concept>
+  <concept id="cohesion-metrics:LcomTwoC1a" severity="major">
+    <requiresConcept refId="cohesion-metrics:Lcom"/>
+    <description>The LCOM of class your.project.cohesionmetrics.lcom.two.C1a must fulfill the expected value: lcom=2.</description>
+    <cypher><![CDATA[
+      MATCH (c:Java:Class {fqn:"your.project.cohesionmetrics.lcom.two.C1a", lcom:2})
+      RETURN c
+     ]]></cypher>
+  </concept>
+  <concept id="cohesion-metrics:LcomTwoC2" severity="major">
+    <requiresConcept refId="cohesion-metrics:Lcom"/>
+    <description>The LCOM of class your.project.cohesionmetrics.lcom.two.C2 must fulfill the expected value: lcom=1.</description>
+    <cypher><![CDATA[
+      MATCH (c:Java:Class {fqn:"your.project.cohesionmetrics.lcom.two.C1", lcom:1})
+      RETURN c
+     ]]></cypher>
+  </concept>
+  <concept id="cohesion-metrics:LcomTwoC3" severity="major">
+    <requiresConcept refId="cohesion-metrics:Lcom"/>
+    <description>The LCOM of class your.project.cohesionmetrics.lcom.two.C3 must fulfill the expected value: lcom=1.</description>
+    <cypher><![CDATA[
+      MATCH (c:Java:Class {fqn:"your.project.cohesionmetrics.lcom.two.C3", lcom:1})
+      RETURN c
+     ]]></cypher>
+  </concept>
+  <concept id="cohesion-metrics:LcomTwoC4" severity="major">
+    <requiresConcept refId="cohesion-metrics:Lcom"/>
+    <description>The LCOM of class your.project.cohesionmetrics.lcom.two.C4 must fulfill the expected value: lcom=1.</description>
+    <cypher><![CDATA[
+      MATCH (c:Java:Class {fqn:"your.project.cohesionmetrics.lcom.two.C4", lcom:1})
+      RETURN c
+     ]]></cypher>
+  </concept>
+  <concept id="cohesion-metrics:LcomTwoC5" severity="major">
+    <requiresConcept refId="cohesion-metrics:Lcom"/>
+    <description>The LCOM of class your.project.cohesionmetrics.lcom.two.C5 must fulfill the expected value: lcom=1.</description>
+    <cypher><![CDATA[
+      MATCH (c:Java:Class {fqn:"your.project.cohesionmetrics.lcom.two.C5", lcom:1})
+      RETURN c
+     ]]></cypher>
+  </concept>
+  <concept id="cohesion-metrics:LcomTwoC6" severity="major">
+    <requiresConcept refId="cohesion-metrics:Lcom"/>
+    <description>The LCOM of class your.project.cohesionmetrics.lcom.two.C6 must fulfill the expected value: lcom=1.</description>
+    <cypher><![CDATA[
+      MATCH (c:Java:Class {fqn:"your.project.cohesionmetrics.lcom.two.C6", lcom:1})
+      RETURN c
+     ]]></cypher>
+  </concept>
+  <concept id="cohesion-metrics:LcomTwoC7" severity="major">
+    <requiresConcept refId="cohesion-metrics:Lcom"/>
+    <description>The LCOM of class your.project.cohesionmetrics.lcom.two.C7 must fulfill the expected value: lcom=1.</description>
+    <cypher><![CDATA[
+      MATCH (c:Java:Class {fqn:"your.project.cohesionmetrics.lcom.two.C7", lcom:1})
+      RETURN c
+     ]]></cypher>
+  </concept>
+  <concept id="cohesion-metrics:LcomTwoC8" severity="major">
+    <requiresConcept refId="cohesion-metrics:Lcom"/>
+    <description>The LCOM of class your.project.cohesionmetrics.lcom.two.C8 must fulfill the expected value: lcom=1.</description>
+    <cypher><![CDATA[
+      MATCH (c:Java:Class {fqn:"your.project.cohesionmetrics.lcom.two.C8", lcom:1})
+      RETURN c
+     ]]></cypher>
+  </concept>
+  <concept id="cohesion-metrics:LcomTwoAll" severity="major">
+    <requiresConcept refId="cohesion-metrics:Lcom"/>
+    <description>The LCOM of class your.project.cohesionmetrics.lcom.two.All must fulfill the expected value: lcom=11.</description>
+    <cypher><![CDATA[
+      MATCH (c:Java:Class {fqn:"your.project.cohesionmetrics.lcom.two.All", lcom:11})
+      RETURN c
+     ]]></cypher>
+  </concept>
+
+  <concept id="cohesion-metrics:LcomClazz1" severity="major">
+    <requiresConcept refId="cohesion-metrics:Lcom"/>
+    <description>The LCOM of class your.project.cohesionmetrics.lcom.unstructured.Clazz1 must fulfill the expected values.</description>
+    <cypher><![CDATA[
+      MATCH (c:Java:Class {fqn:"your.project.cohesionmetrics.lcom.unstructured.Clazz1", lcom4:2})
       RETURN c
      ]]></cypher>
   </concept>
 
   <concept id="cohesion-metrics:LcomClazz2" severity="major">
-    <requiresConcept refId="cohesion-metrics:Lcom4"/>
-    <description>The LCOM of class your.project.cohesionmetrics.lcom.Clazz2 must fulfill the expected values.</description>
+    <requiresConcept refId="cohesion-metrics:Lcom"/>
+    <description>The LCOM of class your.project.cohesionmetrics.lcom.unstructured.Clazz2 must fulfill the expected values.</description>
     <cypher><![CDATA[
-      MATCH (c:Java:Class {fqn:"your.project.cohesionmetrics.lcom.Clazz2", lcom4:1})
+      MATCH (c:Java:Class {fqn:"your.project.cohesionmetrics.lcom.unstructured.Clazz2", lcom4:1})
       RETURN c
     ]]></cypher>
   </concept>
 
   <concept id="cohesion-metrics:LcomClazz3" severity="major">
-    <requiresConcept refId="cohesion-metrics:Lcom4"/>
-    <description>The LCOM of class your.project.cohesionmetrics.lcom.Clazz3 must fulfill the expected values.</description>
+    <requiresConcept refId="cohesion-metrics:Lcom"/>
+    <description>The LCOM of class your.project.cohesionmetrics.lcom.unstructured.Clazz3 must fulfill the expected values.</description>
     <cypher><![CDATA[
-      MATCH (c:Java:Class {fqn:"your.project.cohesionmetrics.lcom.Clazz3", lcom4:2})
+      MATCH (c:Java:Class {fqn:"your.project.cohesionmetrics.lcom.unstructured.Clazz3", lcom4:2})
       RETURN c
     ]]></cypher>
   </concept>
 
   <concept id="cohesion-metrics:LcomClazz4" severity="major">
-    <requiresConcept refId="cohesion-metrics:Lcom4"/>
-    <description>The LCOM of class your.project.cohesionmetrics.lcom.Clazz4 must fulfill the expected values.</description>
+    <requiresConcept refId="cohesion-metrics:Lcom"/>
+    <description>The LCOM of class your.project.cohesionmetrics.lcom.unstructured.Clazz4 must fulfill the expected values.</description>
     <cypher><![CDATA[
-      MATCH (c:Java:Class {fqn:"your.project.cohesionmetrics.lcom.Clazz4", lcom4:1})
+      MATCH (c:Java:Class {fqn:"your.project.cohesionmetrics.lcom.unstructured.Clazz4", lcom4:1})
       RETURN c
     ]]></cypher>
   </concept>
@@ -51,7 +224,7 @@
 
   <concept id="cohesion-metrics:cophPackageA" severity="major">
     <requiresConcept refId="cohesion-metrics:Cohp"/>
-    <description>The cohesion metric of package your.project.coph.a must fulfill the expected values.</description>
+    <description>The cohesion metric of package your.project.coph.a must fulfill the expected values: cohp=1.</description>
     <cypher><![CDATA[
       MATCH (p:Java:Package {fqn:"your.project.cohesionmetrics.cohp.a"})
       RETURN p

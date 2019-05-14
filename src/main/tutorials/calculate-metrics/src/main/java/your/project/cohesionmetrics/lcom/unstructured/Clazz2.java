@@ -1,4 +1,4 @@
-package your.project.cohesionmetrics.lcom;
+package your.project.cohesionmetrics.lcom.unstructured;
 
 final class Clazz2 {
 

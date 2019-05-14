@@ -69,7 +69,9 @@ CALL apoc.refactor.mergeNodes(groups, {properties:"combine", mergeRels:true}) YI
 RETURN c
 ----
 
-[[cohesion-metrics:Lcom4]]
+TODO: Delete duplicate relationships!
+
+[[cohesion-metrics:Lcom]]
 .Counts the groups per class and sets the attribute lcom4.
 [source,cypher,role=concept,requiresConcepts="cohesion-metrics:LcomMergeGroups"]
 ----
@@ -94,7 +96,7 @@ MATCH (p:Java:Package)-[:CONTAINS]->(t:Java:Type)
 WITH p, collect(t) AS types
 UNWIND types AS type MERGE (p)-[:HAS_GROUP]->(g:Group {name:type.name, group:true})-[:BELONGS_TO]->(type)
 WITH p, g, type
-MATCH (t:Type)-[:DEPENDS_ON*1..]->(type) MERGE (g)-[:BELONGS_TO]->(t)
+MATCH (p)-[:CONTAINS]->(t:Java:Type)-[:DEPENDS_ON*1..]->(type) MERGE (g)-[:BELONGS_TO]->(t)
 RETURN g
 ----
 

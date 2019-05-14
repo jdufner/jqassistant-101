@@ -1,4 +1,4 @@
-package your.project.cohesionmetrics.lcom;
+package your.project.cohesionmetrics.lcom.unstructured;
 
 public class Clazz7 {
 

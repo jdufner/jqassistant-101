@@ -43,7 +43,7 @@
                 <group>ood-metrics:DistanceTests</group>
                 <group>visibility-metrics:RelativeVisibilityTests</group>
 <!--                <group>cohesion-metrics:LcomTests</group>-->
-<!--                <group>cohesion-metrics:CohpTests</group>-->
+                <group>cohesion-metrics:CohpTests</group>
               </groups>
             </configuration>
           </execution>
