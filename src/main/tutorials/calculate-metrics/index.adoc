@@ -1,4 +1,5 @@
 :imagesdir: includes
+:icons: font
 
 = Calculate metrics
 Jürgen Dufner <juergen [at] jdufner.de>

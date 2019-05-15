@@ -7,13 +7,15 @@ Hohe LCOM-Werte indizieren Substrukturen, welche nicht in Verbindung zueinander 
 Während diese Metrik hauptsächlich auf Klassenebene berechnet wird, ist derselbe Mechanismus auch auf höheren Abstraktionsebenen wie Packages, Modulen oder Microservices anwendbar.
 ////
 
+==== What means LCOM?
+
 LCOM measures the number of "connected components" in a class.
 A connected component is a set of related methods (and class-level variables).
 There should be only one such a component in each class.
 If there are 2 or more components, the class should be split into so many smaller classes.
 
 * `LCOM = 1`: The class is a solid component with all methods and fields related.
-* `LCOM > 1`: The class can be split to different classes.
+* `LCOM > 1`: The class can be split into different classes.
 * `LCOM = 0`: The class has no methods.
 
 According to the single responsibility principle, a class should provide a single component with all methods and fields related.
@@ -31,10 +33,34 @@ image::Cohesion_what_means_LCOM.png[Class with LCOM=3]
 
 ==== How to calculate LCOM?
 
-To create groups of connected components a group for each field has to be to created.
+The process to calculate LCOM is divided into several steps:
 
+1. <<create_a_group_for_each_field>>
+2. <<connect_each_method_to_the_respective_group>>
+3. <<merge_groups_with_a_common_method>>
+4. <<count_and_assign_the_number_of_groups>>
+
+[[create_a_group_for_each_field]]
 .Create a group for each field
-image::Cohesion_create_groups_LCOM.png[Step 1: Create a group for each field]
+image::01_Cohesion_create_groups_LCOM.png[Step 1: Create a group for each field]
+
+[[connect_each_method_to_the_respective_group]]
+.Connect each method to the respective group
+image::02_Cohesion_connect_methods_to_groups_LCOM.png[Step 2: Connect each method to the respective group]
+
+[[merge_groups_with_a_common_method]]
+.Merge group having at least one field or method common method
+image::03_Merge_groups_with_a_common_method_LCOM.png[Step 3: Merge groups with a common method]
+
+[[count_and_assign_the_number_of_groups]]
+.Count the remaining groups and assign the result to a property of the type.
+image::04_Count_and_assign_the_number_of_groups_LCOM.png[Step 4: Count and assign the number of groups]
+
+IMPORTANT: How to handle methods that don't read or write a field?
+
+==== How to calculate LCOM with Neo4J?
+
+The first two steps (<<create_a_group_for_each_field>>, <<connect_each_method_to_the_respective_group>>) are combined:
 
 [[cohesion-metrics:LcomCreateGroups]]
 .Creates a group for each field and assigns the field to the group and the group to the class.
@@ -56,6 +82,8 @@ MERGE (g)-[:BELONGS_TO]->(method)
 RETURN g
 ----
 
+The next step is to <<merge_groups_with_a_common_method>>.
+
 [[cohesion-metrics:LcomMergeGroups]]
 .Merges all groups that belong to one shared field or method.
 [source,cypher,role=concept,requiresConcepts="cohesion-metrics:LcomCreateGroups"]
@@ -69,7 +97,9 @@ CALL apoc.refactor.mergeNodes(groups, {properties:"combine", mergeRels:true}) YI
 RETURN c
 ----
 
-TODO: Delete duplicate relationships!
+TODO: Delete duplicate relationships! Necessary?
+
+The last step is to <<count_and_assign_the_number_of_groups>>.
 
 [[cohesion-metrics:Lcom]]
 .Counts the groups per class and sets the attribute lcom4.
@@ -80,8 +110,6 @@ WITH c, count(DISTINCT g) AS lcom
 SET c.lcom = lcom
 RETURN c
 ----
-
-==== Example
 
 
 === CohP - package level cohesion metric
@@ -122,9 +150,6 @@ WITH p, count(DISTINCT g) AS cohp
 SET p.cohp = cohp
 RETURN p
 ----
-
-==== Example
-
 
 === Resources
 
