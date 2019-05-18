@@ -24,14 +24,19 @@ Otherwise, the class lacks of cohesion.
 But pay attention to the purpose of the class.
 Sometimes there are classes, that contain only utility methods, e.g. https://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/util/StringUtils.html[StringUtils].
 This is completely ok, because all methods are static and they don't belong to one or more fields.
-That means they haven't any connected components.
+That means it hasn't any connected components.
 
 ==== Example
+
+The example show a class with three connected components.
+It could be split into 3 classes.
 
 .What means LCOM?
 image::Cohesion_what_means_LCOM.png[Class with LCOM=3]
 
-==== How to calculate LCOM?
+==== How to calculate LCOM with Neo4J?
+
+===== Overview
 
 The process to calculate LCOM is divided into several steps:
 
@@ -40,30 +45,36 @@ The process to calculate LCOM is divided into several steps:
 3. <<merge_groups_with_a_common_method>>
 4. <<count_and_assign_the_number_of_groups>>
 
+===== Detailed explanation
+
+.Set the stage
+
+Assume a class ist given as described in the diagram below.
+
+[[assume_given_class]]
+.Assume the given class
+image::00_Cohesion_given_class_LCOM.png[Step 0: Assume the given class]
+
+.Create groups and assign they to the respective fields and methods.
+
+The first step is to create an extra node for each field.
+This new node will be given the label "Group" and the name of the field as name.
+Each field will be connected to the respective group node by a relationship called "belongs-to".
+
 [[create_a_group_for_each_field]]
 .Create a group for each field
 image::01_Cohesion_create_groups_LCOM.png[Step 1: Create a group for each field]
+
+In the next step, all methods that depends either directly or indirectly on a field will be linked to the group node.
 
 [[connect_each_method_to_the_respective_group]]
 .Connect each method to the respective group
 image::02_Cohesion_connect_methods_to_groups_LCOM.png[Step 2: Connect each method to the respective group]
 
-[[merge_groups_with_a_common_method]]
-.Merge group having at least one field or method common method
-image::03_Merge_groups_with_a_common_method_LCOM.png[Step 3: Merge groups with a common method]
-
-[[count_and_assign_the_number_of_groups]]
-.Count the remaining groups and assign the result to a property of the type.
-image::04_Count_and_assign_the_number_of_groups_LCOM.png[Step 4: Count and assign the number of groups]
-
-IMPORTANT: How to handle methods that don't read or write a field?
-
-==== How to calculate LCOM with Neo4J?
-
-The first two steps (<<create_a_group_for_each_field>>, <<connect_each_method_to_the_respective_group>>) are combined:
+The previous two steps (<<create_a_group_for_each_field>>, <<connect_each_method_to_the_respective_group>>) are combined in one Cypher statement:
 
 [[cohesion-metrics:LcomCreateGroups]]
-.Creates a group for each field and assigns the field to the group and the group to the class.
+.Creates a group for each field and assigns the field and their accessing methods to the group and the group to the class.
 [source,cypher,role=concept]
 ----
 MATCH (c:Java:Class)-[:DECLARES]->(f:Field) WHERE f.static IS NULL
@@ -82,7 +93,19 @@ MERGE (g)-[:BELONGS_TO]->(method)
 RETURN g
 ----
 
-The next step is to <<merge_groups_with_a_common_method>>.
+.Merge group nodes
+
+Then, all methods or fields that are linked to more than one group will be merged to one group node.
+
+[[merge_groups_with_a_common_method]]
+.Merge group having at least one field or method common method
+image::03_Merge_groups_with_a_common_method_LCOM.png[Step 3: Merge groups with a common method]
+
+The Cypher statement for <<merge_groups_with_a_common_method>> is quite simple.
+The challenge is, that it requires the https://neo4j-contrib.github.io/neo4j-apoc-procedures/[APOC library].
+
+[quote, APOC User Guide]
+The APOC library consists of many (about 450) procedures and functions to help with many different tasks in areas like data integration, graph algorithms or data conversion.
 
 [[cohesion-metrics:LcomMergeGroups]]
 .Merges all groups that belong to one shared field or method.
@@ -97,12 +120,21 @@ CALL apoc.refactor.mergeNodes(groups, {properties:"combine", mergeRels:true}) YI
 RETURN c
 ----
 
-TODO: Delete duplicate relationships! Necessary?
+// Missing step: Is it necessary to delete duplicate relationships?
 
-The last step is to <<count_and_assign_the_number_of_groups>>.
+.Count group nodes
+
+Last, the remaining group nodes will be counted and the result will be added as a new property called "lcom" of the class.
+
+[[count_and_assign_the_number_of_groups]]
+.Count the remaining groups and assign the result to a property of the type.
+image::04_Count_and_assign_the_number_of_groups_LCOM.png[Step 4: Count and assign the number of groups]
+
+The last step <<count_and_assign_the_number_of_groups>> extends the existing data model.
+This step is useful to simplify further Cypher queries, e.g. to find the classes with a `LCOM > 1`.
 
 [[cohesion-metrics:Lcom]]
-.Counts the groups per class and sets the attribute lcom4.
+.Counts the groups per class and sets the attribute lcom.
 [source,cypher,role=concept,requiresConcepts="cohesion-metrics:LcomMergeGroups"]
 ----
 MATCH (c:Java:Class)-[:HAS_GROUP]->(g:Group)
@@ -111,6 +143,7 @@ SET c.lcom = lcom
 RETURN c
 ----
 
+IMPORTANT: How to handle methods that don't read or write a field?
 
 === CohP - package level cohesion metric
 
