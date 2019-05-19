@@ -11,7 +11,7 @@ Während diese Metrik hauptsächlich auf Klassenebene berechnet wird, ist dersel
 
 LCOM measures the number of "connected components" in a class.
 A connected component is a set of related methods (and class-level variables).
-There should be only one such a component in each class.
+There should be only one connected component in each class.
 If there are 2 or more components, the class should be split into so many smaller classes.
 
 * `LCOM = 1`: The class is a solid component with all methods and fields related.
@@ -21,10 +21,16 @@ If there are 2 or more components, the class should be split into so many smalle
 According to the single responsibility principle, a class should provide a single component with all methods and fields related.
 This is the case when LCOM is exactly 1.
 Otherwise, the class lacks of cohesion.
+
 But pay attention to the purpose of the class.
 Sometimes there are classes, that contain only utility methods, e.g. https://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/util/StringUtils.html[StringUtils].
 This is completely ok, because all methods are static and they don't belong to one or more fields.
 That means it hasn't any connected components.
+In this case the LCOM is 0.
+
+IMPORTANT: How to handle methods that don't read or write a field? +
+Has to be distinguished between static vs non-static, final vs non-final? +
+What role has the visibility?
 
 ==== Example
 
@@ -142,8 +148,6 @@ WITH c, count(DISTINCT g) AS lcom
 SET c.lcom = lcom
 RETURN c
 ----
-
-IMPORTANT: How to handle methods that don't read or write a field?
 
 === CohP - package level cohesion metric
 
