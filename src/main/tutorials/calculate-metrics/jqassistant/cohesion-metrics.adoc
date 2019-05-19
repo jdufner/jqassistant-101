@@ -11,8 +11,8 @@ Während diese Metrik hauptsächlich auf Klassenebene berechnet wird, ist dersel
 
 LCOM measures the number of "connected components" in a class.
 A connected component is a set of related methods (and class-level variables).
-There should be only one connected component in each class.
-If there are 2 or more components, the class should be split into so many smaller classes.
+There should be only one connected component in one class.
+If there are 2 or more components, the class should be split into several smaller classes.
 
 * `LCOM = 1`: The class is a solid component with all methods and fields related.
 * `LCOM > 1`: The class can be split into different classes.
@@ -61,7 +61,7 @@ Assume a class ist given as described in the diagram below.
 .Assume the given class
 image::00_Cohesion_given_class_LCOM.png[Step 0: Assume the given class]
 
-.Create groups and assign they to the respective fields and methods.
+.Create groups and assign they to the respective fields and methods
 
 The first step is to create an extra node for each field.
 This new node will be given the label "Group" and the name of the field as name.
@@ -80,7 +80,7 @@ image::02_Cohesion_connect_methods_to_groups_LCOM.png[Step 2: Connect each metho
 The previous two steps (<<create_a_group_for_each_field>>, <<connect_each_method_to_the_respective_group>>) are combined in one Cypher statement:
 
 [[cohesion-metrics:LcomCreateGroups]]
-.Creates a group for each field and assigns the field and their accessing methods to the group and the group to the class.
+.Creates a group for each field and assigns the field and their accessing methods to the group and the group to the class
 [source,cypher,role=concept]
 ----
 MATCH (c:Java:Class)-[:DECLARES]->(f:Field) WHERE f.static IS NULL
@@ -104,7 +104,7 @@ RETURN g
 Then, all methods or fields that are linked to more than one group will be merged to one group node.
 
 [[merge_groups_with_a_common_method]]
-.Merge group having at least one field or method common method
+.Merge groups having at least one common field or common method
 image::03_Merge_groups_with_a_common_method_LCOM.png[Step 3: Merge groups with a common method]
 
 The Cypher statement for <<merge_groups_with_a_common_method>> is quite simple.
@@ -114,7 +114,7 @@ The challenge is, that it requires the https://neo4j-contrib.github.io/neo4j-apo
 The APOC library consists of many (about 450) procedures and functions to help with many different tasks in areas like data integration, graph algorithms or data conversion.
 
 [[cohesion-metrics:LcomMergeGroups]]
-.Merges all groups that belong to one shared field or method.
+.Merges all groups that belong to one shared field or method
 [source,cypher,role=concept,requiresConcepts="cohesion-metrics:LcomCreateGroups"]
 ----
 MATCH (c:Java:Class)-[:DECLARES]->(m:Method) WHERE m.static IS NULL
@@ -133,14 +133,14 @@ RETURN c
 Last, the remaining group nodes will be counted and the result will be added as a new property called "lcom" of the class.
 
 [[count_and_assign_the_number_of_groups]]
-.Count the remaining groups and assign the result to a property of the type.
+.Count the remaining groups and assign the result to a property of the type
 image::04_Count_and_assign_the_number_of_groups_LCOM.png[Step 4: Count and assign the number of groups]
 
 The last step <<count_and_assign_the_number_of_groups>> extends the existing data model.
 This step is useful to simplify further Cypher queries, e.g. to find the classes with a `LCOM > 1`.
 
 [[cohesion-metrics:Lcom]]
-.Counts the groups per class and sets the attribute lcom.
+.Counts the groups per class and sets the attribute lcom
 [source,cypher,role=concept,requiresConcepts="cohesion-metrics:LcomMergeGroups"]
 ----
 MATCH (c:Java:Class)-[:HAS_GROUP]->(g:Group)
@@ -149,9 +149,24 @@ SET c.lcom = lcom
 RETURN c
 ----
 
-=== CohP - package level cohesion metric
+=== Cohesion of types in packages
 
-Computes a package level cohesion metric
+==== What means package cohesion?
+
+This metric is very similar to <<What means LCOM?>>, but it isn't on class level, but on package level.
+This metric measures the number of "connected components" in a package.
+A connected component is a set of classes and interfaces.
+There should be only one connected component in one package.
+If there are 2 or more connected components, the package should be divided into several smaller packages.
+
+
+==== Example
+
+==== How to calculate CohP with Neo4J?
+
+===== Overview
+
+===== Detailed explanation
 
 [[cohesion-metrics:CohpCreateGroups]]
 .Creates a group for each type and assigns the type to the group and the group to the package.
