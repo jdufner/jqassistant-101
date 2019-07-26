@@ -149,18 +149,23 @@ SET c.lcom = lcom
 RETURN c
 ----
 
-=== Cohesion of types in packages
+=== COP - Cohesion in types of packages
 
 ==== What means package cohesion?
 
-This metric is very similar to <<What means LCOM?>>, but it isn't on class level, but on package level.
+This metric is very similar to "<<What means LCOM?>>", but it isn't on class level, but on package level.
 This metric measures the number of "connected components" in a package.
-A connected component is a set of classes and interfaces.
+A connected component is a set of coherent classes and interfaces inside a package.
 There should be only one connected component in one package.
 If there are 2 or more connected components, the package should be divided into several smaller packages.
 
-
 ==== Example
+
+The example show a package with three connected components.
+It could be split into 3 packages.
+
+.What means cohesion of a package?
+image::Cohesion_what_means_cohesion_of_a_package.png[Package with cohesion=3]
 
 ==== How to calculate CohP with Neo4J?
 
