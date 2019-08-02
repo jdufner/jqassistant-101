@@ -44,6 +44,7 @@
                 <group>visibility-metrics:RelativeVisibilityTests</group>
 <!--                <group>cohesion-metrics:LcomTests</group>-->
                 <group>cohesion-metrics:CohpTests</group>
+                <group>john-lakos-metrics:DependsUponUsedFrom</group>
               </groups>
             </configuration>
           </execution>

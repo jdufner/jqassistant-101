@@ -1,0 +1,16 @@
+== John Lakos' Metrics
+
+This chapter describes the metrics by John Lakos published in Large-Scale C++ Software Design, Addison-Wesley 1996.
+
+=== Depends Upon and Used From
+
+[[john-lakos-metrics:PackagesDependsUpon]]
+.Counts the packages this package depends upon inclusive itself
+[source,cypher,role=concept,requiresConcepts="dependency:Package"]
+----
+MATCH (p:Java:Package)
+WHERE p.fqn =~ "your.project.johnlakos.*"
+OPTIONAL MATCH (p)-[:DEPENDS_ON*1..]->(dp:Java:Package)
+WHERE p <> dp
+RETURN p.fqn, coalesce(count(dp), 0) + 1
+----

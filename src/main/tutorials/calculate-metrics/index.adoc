@@ -24,17 +24,11 @@ A famous quote of Peter F. Drucker is
   If you can't measure it, you can't improve it.
 
 ////
-
 The quote exists in different variants. I couldn't figure out, what the originally quote is.
-
   If you can't measure it, you can't manage it.
-
   If you can't measure it, you can't change it.
-
   You can't manage what you can't measure.
-
   If it cannot be measured, it cannot be managed.
-
 ////
 
 Metrics are just one way to measure your software system.
