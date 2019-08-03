@@ -12,5 +12,20 @@ MATCH (p:Java:Package)
 WHERE p.fqn =~ "your.project.johnlakos.*"
 OPTIONAL MATCH (p)-[:DEPENDS_ON*1..]->(dp:Java:Package)
 WHERE p <> dp
-RETURN p.fqn, coalesce(count(dp), 0) + 1
+WITH p, coalesce(count(DISTINCT dp), 0) + 1 as dependsUpon
+SET p.dependsUpon = dependsUpon
+RETURN p.fqn
+----
+
+[[john-lakos-metrics:PackagesUsedFrom]]
+.Counts the packages this package used from inclusive itself
+[source,cypher,role=concept,requiresConcepts="dependency:Package"]
+----
+MATCH (p:Java:Package)
+WHERE p.fqn =~ "your.project.johnlakos.*"
+OPTIONAL MATCH (up:Java:Package)-[:DEPENDS_ON*1..]->(p)
+WHERE p <> up
+WITH p, coalesce(count(DISTINCT up), 0) + 1 as usedFrom
+SET p.usedFrom = usedFrom
+RETURN p.fqn
 ----

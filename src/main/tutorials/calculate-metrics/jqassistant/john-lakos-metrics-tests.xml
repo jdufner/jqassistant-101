@@ -1,0 +1,148 @@
+<jqa:jqassistant-rules xmlns:jqa="http://www.buschmais.com/jqassistant/core/rule/schema/v1.3">
+
+  <!-- https://github.com/buschmais/jqa-core-framework/blob/master/rule/src/main/resources/META-INF/xsd/jqassistant-rules-1.4.xsd -->
+
+  <group id="john-lakos-metrics:DependsUponUsedFrom">
+    <includeConcept refId="john-lakos-metrics:PackagesDependsUponPackageA"/>
+    <includeConcept refId="john-lakos-metrics:PackagesDependsUponPackageB1"/>
+    <includeConcept refId="john-lakos-metrics:PackagesDependsUponPackageB2"/>
+    <includeConcept refId="john-lakos-metrics:PackagesDependsUponPackageC1"/>
+    <includeConcept refId="john-lakos-metrics:PackagesDependsUponPackageC2"/>
+    <includeConcept refId="john-lakos-metrics:PackagesDependsUponPackageC3"/>
+    <includeConcept refId="john-lakos-metrics:PackagesDependsUponPackageD1"/>
+    <includeConcept refId="john-lakos-metrics:PackagesDependsUponPackageD2"/>
+    <includeConcept refId="john-lakos-metrics:PackagesDependsUponPackageD3"/>
+    <includeConcept refId="john-lakos-metrics:PackagesDependsUponPackageD4"/>
+    <includeConcept refId="john-lakos-metrics:PackagesDependsUponPackageE1"/>
+    <includeConcept refId="john-lakos-metrics:PackagesDependsUponPackageE2"/>
+    <includeConcept refId="john-lakos-metrics:PackagesDependsUponPackageF1"/>
+    <includeConcept refId="john-lakos-metrics:PackagesUsedFromPackageA"/>
+  </group>
+
+  <concept id="john-lakos-metrics:PackagesDependsUponPackageA" severity="major">
+    <requiresConcept refId="john-lakos-metrics:PackagesDependsUpon"/>
+    <description>Counts all packages this package depends upon inclusive the package itself.</description>
+    <cypher><![CDATA[
+      MATCH (p:Package {fqn:"your.project.johnlakos.a", dependsUpon:1})
+      RETURN p
+    ]]></cypher>
+  </concept>
+
+  <concept id="john-lakos-metrics:PackagesDependsUponPackageB1" severity="major">
+    <requiresConcept refId="john-lakos-metrics:PackagesDependsUpon"/>
+    <description>Counts all packages this package depends upon inclusive the package itself.</description>
+    <cypher><![CDATA[
+      MATCH (p:Package {fqn:"your.project.johnlakos.b.b1", dependsUpon:2})
+      RETURN p
+    ]]></cypher>
+  </concept>
+
+  <concept id="john-lakos-metrics:PackagesDependsUponPackageB2" severity="major">
+    <requiresConcept refId="john-lakos-metrics:PackagesDependsUpon"/>
+    <description>Counts all packages this package depends upon inclusive the package itself.</description>
+    <cypher><![CDATA[
+      MATCH (p:Package {fqn:"your.project.johnlakos.b.b2", dependsUpon:1})
+      RETURN p
+    ]]></cypher>
+  </concept>
+
+  <concept id="john-lakos-metrics:PackagesDependsUponPackageC1" severity="major">
+    <requiresConcept refId="john-lakos-metrics:PackagesDependsUpon"/>
+    <description>Counts all packages this package depends upon inclusive the package itself.</description>
+    <cypher><![CDATA[
+      MATCH (p:Package {fqn:"your.project.johnlakos.c.c1", dependsUpon:3})
+      RETURN p
+    ]]></cypher>
+  </concept>
+
+  <concept id="john-lakos-metrics:PackagesDependsUponPackageC2" severity="major">
+    <requiresConcept refId="john-lakos-metrics:PackagesDependsUpon"/>
+    <description>Counts all packages this package depends upon inclusive the package itself.</description>
+    <cypher><![CDATA[
+      MATCH (p:Package {fqn:"your.project.johnlakos.c.c2", dependsUpon:2})
+      RETURN p
+    ]]></cypher>
+  </concept>
+
+  <concept id="john-lakos-metrics:PackagesDependsUponPackageC3" severity="major">
+    <requiresConcept refId="john-lakos-metrics:PackagesDependsUpon"/>
+    <description>Counts all packages this package depends upon inclusive the package itself.</description>
+    <cypher><![CDATA[
+      MATCH (p:Package {fqn:"your.project.johnlakos.c.c3", dependsUpon:1})
+      RETURN p
+    ]]></cypher>
+  </concept>
+
+  <concept id="john-lakos-metrics:PackagesDependsUponPackageD1" severity="major">
+    <requiresConcept refId="john-lakos-metrics:PackagesDependsUpon"/>
+    <description>Counts all packages this package depends upon inclusive the package itself.</description>
+    <cypher><![CDATA[
+      MATCH (p:Package {fqn:"your.project.johnlakos.d.d1", dependsUpon:4})
+      RETURN p
+    ]]></cypher>
+  </concept>
+
+  <concept id="john-lakos-metrics:PackagesDependsUponPackageD2" severity="major">
+    <requiresConcept refId="john-lakos-metrics:PackagesDependsUpon"/>
+    <description>Counts all packages this package depends upon inclusive the package itself.</description>
+    <cypher><![CDATA[
+      MATCH (p:Package {fqn:"your.project.johnlakos.d.d2", dependsUpon:2})
+      RETURN p
+    ]]></cypher>
+  </concept>
+
+  <concept id="john-lakos-metrics:PackagesDependsUponPackageD3" severity="major">
+    <requiresConcept refId="john-lakos-metrics:PackagesDependsUpon"/>
+    <description>Counts all packages this package depends upon inclusive the package itself.</description>
+    <cypher><![CDATA[
+      MATCH (p:Package {fqn:"your.project.johnlakos.d.d3", dependsUpon:2})
+      RETURN p
+    ]]></cypher>
+  </concept>
+
+  <concept id="john-lakos-metrics:PackagesDependsUponPackageD4" severity="major">
+    <requiresConcept refId="john-lakos-metrics:PackagesDependsUpon"/>
+    <description>Counts all packages this package depends upon inclusive the package itself.</description>
+    <cypher><![CDATA[
+      MATCH (p:Package {fqn:"your.project.johnlakos.d.d4", dependsUpon:1})
+      RETURN p
+    ]]></cypher>
+  </concept>
+
+  <concept id="john-lakos-metrics:PackagesDependsUponPackageE1" severity="major">
+    <requiresConcept refId="john-lakos-metrics:PackagesDependsUpon"/>
+    <description>Counts all packages this package depends upon inclusive the package itself.</description>
+    <cypher><![CDATA[
+      MATCH (p:Package {fqn:"your.project.johnlakos.e.e1", dependsUpon:2})
+      RETURN p
+    ]]></cypher>
+  </concept>
+
+  <concept id="john-lakos-metrics:PackagesDependsUponPackageE2" severity="major">
+    <requiresConcept refId="john-lakos-metrics:PackagesDependsUpon"/>
+    <description>Counts all packages this package depends upon inclusive the package itself.</description>
+    <cypher><![CDATA[
+      MATCH (p:Package {fqn:"your.project.johnlakos.e.e2", dependsUpon:2})
+      RETURN p
+    ]]></cypher>
+  </concept>
+
+  <concept id="john-lakos-metrics:PackagesDependsUponPackageF1" severity="major">
+    <requiresConcept refId="john-lakos-metrics:PackagesDependsUpon"/>
+    <description>Counts all packages this package depends upon inclusive the package itself.</description>
+    <cypher><![CDATA[
+      MATCH (p:Package {fqn:"your.project.johnlakos.f.f1", dependsUpon:3})
+      RETURN p
+    ]]></cypher>
+  </concept>
+
+  <concept id="john-lakos-metrics:PackagesUsedFromPackageA" severity="major">
+    <requiresConcept refId="john-lakos-metrics:PackagesUsedFrom"/>
+    <description>Counts all packages this package depends upon inclusive the package itself.</description>
+    <cypher><![CDATA[
+      MATCH (p:Package {fqn:"your.project.johnlakos.a", usedFrom:1})
+      RETURN p
+    ]]></cypher>
+  </concept>
+
+</jqa:jqassistant-rules>
