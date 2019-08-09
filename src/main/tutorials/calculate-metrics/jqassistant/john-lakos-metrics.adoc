@@ -10,11 +10,10 @@ This chapter describes the metrics by John Lakos published in Large-Scale C++ So
 ----
 MATCH (p:Java:Package)
 WHERE p.fqn =~ "your.project.johnlakos.*"
-OPTIONAL MATCH (p)-[:DEPENDS_ON*1..]->(dp:Java:Package)
-WHERE p <> dp
-WITH p, coalesce(count(DISTINCT dp), 0) + 1 as dependsUpon
+CALL apoc.path.subgraphNodes(p, {relationshipFilter: "DEPENDS_ON>", labelFilter:"Package"}) YIELD node
+WITH p, count(node) as dependsUpon
 SET p.dependsUpon = dependsUpon
-RETURN p.fqn
+RETURN p.fqn AS fqn, dependsUpon
 ----
 
 [[john-lakos-metrics:PackagesUsedFrom]]
@@ -23,9 +22,8 @@ RETURN p.fqn
 ----
 MATCH (p:Java:Package)
 WHERE p.fqn =~ "your.project.johnlakos.*"
-OPTIONAL MATCH (up:Java:Package)-[:DEPENDS_ON*1..]->(p)
-WHERE p <> up
-WITH p, coalesce(count(DISTINCT up), 0) + 1 as usedFrom
+CALL apoc.path.subgraphNodes(p, {relationshipFilter: "<DEPENDS_ON", labelFilter:"Package"}) YIELD node
+WITH p, count(node) as usedFrom
 SET p.usedFrom = usedFrom
-RETURN p.fqn
+RETURN p.fqn AS fqn, usedFrom
 ----
